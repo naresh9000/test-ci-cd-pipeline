@@ -1,0 +1,34 @@
+pipeline{
+    agent none
+    environment {
+        PROJECT = "practice-one"
+    }
+    stages {
+        stage('Running parallel stages') {
+            parallel {
+                stage('Deploy to dev') {
+                    agent {
+                        label  'dev'
+                    }
+                    steps {
+                        sh "mvn --version"
+                        sh "java --version"
+                        sh "hostname"
+                    }
+
+                }
+                stage('Deploy to prod') {
+                    agent {
+                        label  'prod'
+                    }
+                    steps {
+                        sh "mvn --version"
+                        sh "packer --version"
+                        sh "hostname"
+                    }
+
+                }
+            }
+        }
+    }
+}
